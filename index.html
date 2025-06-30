@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YenInVent - Shop Management System</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+   
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="login-screen">
+        <div class="login-container" id="login-container">
+            <h2>YenInVent</h2>
+            <p>Shop Management System</p>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required placeholder="Enter your username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required placeholder="Enter your password">
+                </div>
+                <button type="submit" class="btn">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="app">
+        <!-- Header -->
+        <header class="app-header">
+            <button class="toggle-nav" id="toggle-nav">
+                ☰
+            </button>
+            <div class="logo">YenInVent</div>
+            <div class="user-info">
+                <button class="dark-mode-toggle" id="dark-mode-btn">🌙</button>
+                <span class="user-role" id="user-role">Admin</span>
+                <button class="logout-btn" id="logout-btn">
+                    <span>Logout</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav-container" id="nav-container">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active" data-page="dashboard">
+                        <span>📊</span>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-page="inventory">
+                        <span>📦</span>
+                        <span>Inventory</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-page="pos">
+                        <span>🛒</span>
+                        <span>POS</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-page="reports">
+                        <span>📈</span>
+                        <span>Reports</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-page="settings">
+                        <span>⚙️</span>
+                        <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content" id="main-content">
+            <!-- Dashboard Page -->
+            <div class="page" id="dashboard-page">
+                <h1 class="page-title">Dashboard</h1>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-title">Total Products</div>
+                        <div class="stat-value" id="total-products">0</div>
+                        <div class="stat-change up">↑ 12% from last month</div>
+                    </div>
+                    <div class="stat-card warning">
+                        <div class="stat-title">Low Stock Items</div>
+                        <div class="stat-value" id="low-stock">0</div>
+                        <div class="stat-change down">↓ 5% from last month</div>
+                    </div>
+                    <div class="stat-card danger">
+                        <div class="stat-title">Expiring Soon</div>
+                        <div class="stat-value" id="expiring-soon">0</div>
+                        <div class="stat-change up">↑ 8% from last month</div>
+                    </div>
+                    <div class="stat-card success">
+                        <div class="stat-title">Today's Sales</div>
+                        <div class="stat-value" id="today-sales">₵0.00</div>
+                        <div class="stat-change up">↑ 15% from yesterday</div>
+                    </div>
+                    <!-- New Weekly Sales Card -->
+                    <div class="stat-card purple">
+                        <div class="stat-title">Weekly Sales</div>
+                        <div class="stat-value" id="weekly-sales">₵0.00</div>
+                        <div class="stat-change up">↑ 22% from last week</div>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <h3>Sales Overview</h3>
+                    <canvas id="sales-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- Inventory Page -->
+            <div class="page" id="inventory-page" style="display: none;">
+                <h1 class="page-title">Inventory Management</h1>
+                
+                <div class="inventory-actions">
+                    <div class="search-box">
+                        <input type="text" id="inventory-search" placeholder="Search products...">
+                        <button type="button">🔍</button>
+                    </div>
+                    <button class="btn" id="add-product-btn">Add Product</button>
+                </div>
+                
+                <div class="table-container">
+                    <table id="inventory-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Product Name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>Expiry Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-table-body">
+                            <!-- Products will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- POS Page -->
+            <div class="page" id="pos-page" style="display: none;">
+                <h1 class="page-title">Point of Sale</h1>
+                
+                <div class="pos-container">
+                    <div class="products-section">
+                        <div class="search-box">
+                            <input type="text" id="pos-search" placeholder="Search products...">
+                            <button type="button">🔍</button>
+                        </div>
+                        
+                        <div class="products-grid" id="products-grid">
+                            <!-- Products will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <div class="cart-container">
+                        <div class="cart-header">
+                            <h3>Current Sale</h3>
+                            <button class="action-btn" id="clear-cart-btn">Clear</button>
+                        </div>
+                        
+                        <div class="cart-items" id="cart-items">
+                            <!-- Cart items will be loaded here -->
+                        </div>
+                        
+                        <div class="cart-summary">
+                            <div class="summary-row summary-total">
+                                <span><strong>Total</strong></span>
+                                <span id="cart-total">₵0.00</span>
+                            </div>
+                            
+                            <div class="payment-methods">
+                                <div class="payment-method cash" data-method="cash">
+                                    <i>💵</i>
+                                    <span>Cash</span>
+                                </div>
+                                <div class="payment-method momo" data-method="momo">
+                                    <i>📱</i>
+                                    <span>MoMo</span>
+                                </div>
+                            </div>
+                            
+                            <button class="btn" id="checkout-btn">Complete Sale</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Page -->
+            <div class="page" id="reports-page" style="display: none;">
+                <h1 class="page-title">Reports</h1>
+                
+                <div class="report-filters">
+                    <select id="report-type" class="form-control">
+                        <option value="daily">Daily Sales</option>
+                        <option value="monthly">Monthly Sales</option>
+                        <option value="inventory">Inventory Status</option>
+                        <option value="payment">Payment Methods</option>
+                    </select>
+                    
+                    <div id="date-range-filters" style="margin-top: 1rem;">
+                        <input type="date" id="start-date" class="form-control" style="display: inline-block; width: auto;">
+                        <span> to </span>
+                        <input type="date" id="end-date" class="form-control" style="display: inline-block; width: auto;">
+                        <button class="btn" id="generate-report-btn" style="margin-left: 1rem;">Generate</button>
+                    </div>
+                </div>
+                
+                <div class="chart-container" style="margin-top: 1.5rem;">
+                    <canvas id="report-chart"></canvas>
+                </div>
+                
+                <div class="table-container" style="margin-top: 1.5rem;">
+                    <table id="report-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Total Sales</th>
+                                <th>Items Sold</th>
+                                <th>Payment Method</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="report-table-body">
+                            <!-- Report data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div style="margin-top: 1.5rem;">
+                    <button class="btn" id="export-report-btn">Export Report</button>
+                </div>
+            </div>
+
+            <!-- Settings Page -->
+            <div class="page" id="settings-page" style="display: none;">
+                <h1 class="page-title">Settings</h1>
+                
+                <div class="settings-section">
+                    <h3>User Management</h3>
+                    <button class="btn" id="add-user-btn">Add New User</button>
+                    
+                    <div class="table-container" style="margin-top: 1rem;">
+                        <table id="users-table">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Role</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table-body">
+                                <!-- Users will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="settings-section" style="margin-top: 2rem;">
+                    <h3>System Settings</h3>
+                    
+                    <div class="form-row">
+                        <label class="form-label">Low Stock Threshold</label>
+                        <input type="number" id="low-stock-threshold" class="form-control" value="10">
+                    </div>
+                    
+                    <div class="form-row">
+                        <label class="form-label">Expiry Warning Days</label>
+                        <input type="number" id="expiry-warning-days" class="form-control" value="7">
+                    </div>
+                
+                    <button class="btn" id="save-settings-btn" style="margin-top: 1rem;">Save Settings</button>
+                </div>
+                
+                <div class="settings-section" style="margin-top: 2rem;">
+                    <h3>Data Management</h3>
+                    
+                    <button class="btn" id="export-products-btn">Export Product List</button>
+                    <button class="btn" id="export-sales-btn" style="margin-left: 1rem;">Export Sales Data</button>
+                    <button class="btn" id="backup-data-btn" style="margin-left: 1rem;">Backup All Data</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Product Modal -->
+    <div class="modal" id="product-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="product-modal-title">Add Product</h3>
+                <button class="modal-close" id="close-product-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="product-form">
+                    <input type="hidden" id="product-id">
+                    <div class="form-row">
+                        <label class="form-label">Product Name</label>
+                        <input type="text" id="product-name" class="form-control" required>
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Category</label>
+                        <input type="text" id="product-category" class="form-control" required>
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Price</label>
+                        <input type="number" id="product-price" class="form-control" step="0.01" required>
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Stock Quantity</label>
+                        <input type="number" id="product-stock" class="form-control" required>
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Expiry Date</label>
+                        <input type="date" id="product-expiry" class="form-control">
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Barcode (Optional)</label>
+                        <input type="text" id="product-barcode" class="form-control">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancel-product-btn">Cancel</button>
+                <button class="btn" id="save-product-btn">Save Product</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Modal -->
+    <div class="modal" id="user-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="user-modal-title">Add User</h3>
+                <button class="modal-close" id="close-user-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="user-form">
+                    <input type="hidden" id="user-id">
+                    <div class="form-row">
+                        <label class="form-label">Username</label>
+                        <input type="text" id="user-username" class="form-control" required>
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Password</label>
+                        <input type="password" id="user-password" class="form-control" required>
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Role</label>
+                        <select id="user-role" class="form-control" required>
+                            <option value="admin">Admin</option>
+                            <option value="manager">Manager</option>
+                            <option value="cashier">Cashier</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancel-user-btn">Cancel</button>
+                <button class="btn" id="save-user-btn">Save User</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirm-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="confirm-modal-title">Confirm Action</h3>
+                <button class="modal-close" id="close-confirm-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-message">Are you sure you want to perform this action?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancel-confirm-btn">Cancel</button>
+                <button class="btn" id="confirm-btn">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
